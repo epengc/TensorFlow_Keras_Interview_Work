@@ -72,6 +72,9 @@ model = tf.keras.Sequential([
     tf.keras.layers.Dense(len(label_names),activation='softmax') #分类
 ])
 
+callbacks = [
+    tf.keras.callbacks.ModelCheckpoint(filepath="./"),
+]
 model.compile(optimizer=tf.keras.optimizers.Adam(),
               loss='sparse_categorical_crossentropy',
               metrics=["accuracy"])
@@ -81,4 +84,10 @@ model.summary()
 steps_per_epoch=tf.math.ceil(len(all_images_paths)/Batch_size).numpy()
 print(steps_per_epoch)
 
-model.fit(ds, epochs=10, steps_per_epoch=30,verbose=2)
+model.fit(ds, epochs=3, steps_per_epoch=30, callbacks=callbacks, verbose=2)
+
+converter = tf.lite.TFLiteConverter.from_keras_model(model)
+tflite_model = converter.convert()
+
+with tf.io.gfile.GFile('model.tflite', 'wb') as f:
+  f.write(tflite_model)
