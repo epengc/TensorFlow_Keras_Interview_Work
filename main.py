@@ -37,15 +37,17 @@ def demo_basic():
     all_images_labels = [label_to_index[pathlib.Path(path).parent.name] for path in all_images_paths]
     print(all_images_labels[:10])
 
-    path_ds = tf.data.Dataset.from_tensor_slices(all_images_paths)
-    image_ds = path_ds.map(load_and_preprocess_image, num_parallel_calls=AUTOTUNE)
-    label_ds = tf.data.Dataset.from_tensor_slices(tf.cast(all_images_labels, tf.int64))
-    image_label_ds = tf.data.Dataset.zip((image_ds, label_ds))
+    index = int(args.ratio*image_count)
+    train_images_labels = all_images_labels[0:index]
+    print('train_data number is {}'.format(len(train_images_labels)))
+    val_images_labels = all_images_labels[index::]
+    print('val_data number is {}'.format(len(val_images_labels)))
 
-    batch_size = args.batch_size
-    ds = image_label_ds.shuffle(buffer_size=image_count)
+    train_ds = prepare_dataset(all_images_paths[0:index], all_images_labels[0:index], AUTOTUNE)
+    val_ds = prepare_dataset(all_images_paths[index::], all_images_labels[index::], AUTOTUNE)
+    ds = train_ds.shuffle(buffer_size=image_count)
     ds = ds.repeat()
-    ds = ds.batch(batch_size)
+    ds = ds.batch(args.train_batch_size)
     ds = ds.prefetch(buffer_size=AUTOTUNE)
     
     model = mobile_net(classes=len(label_names))
@@ -57,10 +59,11 @@ def demo_basic():
                   metrics=["accuracy"])
     model.summary()
 
-    steps_per_epoch = tf.math.ceil(len(all_images_paths)/batch_size).numpy()
+    steps_per_epoch = tf.math.ceil(index/args.train_batch_size).numpy()
     print('steps_per_epoch = {}'.format(steps_per_epoch))
     
     model.fit(ds, epochs=args.max_epochs, steps_per_epoch=steps_per_epoch, callbacks=callbacks, verbose=2)
+    model.evaluate(val_ds.batch(2), batch_size=2, verbose=2)
     converter = tf.lite.TFLiteConverter.from_keras_model(model)
     tflite_model = converter.convert()
 

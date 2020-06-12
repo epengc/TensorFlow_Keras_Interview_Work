@@ -10,7 +10,7 @@ def parse_parameters():
     parser = argparse.ArgumentParser(description='Visual Defense Homework Net')
     parser.add_argument('--data_root', default='./data', type=str, metavar='DIR',
                         help='path to dataset')
-    parser.add_argument('--batch_size', default=4, type=int, metavar='N', 
+    parser.add_argument('--train_batch_size', default=4, type=int, metavar='N', 
                         help='Batch_size when training')
     parser.add_argument('--max_epochs', default=5, type=int, metavar='N',
                         help='number of total epochs to run')
@@ -18,12 +18,14 @@ def parse_parameters():
                         help='iterations per epochs')
     parser.add_argument('--weights', default='./weights/', type=str, 
                         help='weights_backup')
+    parser.add_argument('--ratio', default=0.9, type=float, 
+                        help='Ratio of training over validation')
     args = parser.parse_args()
     return args
 
 def preprocess_img(image):
-    image = tf.image.decode_jpeg(image, channels=3)
-    image = tf.image.resize(image,[192,192]) #resize images
+    image = tf.image.decode_png(image,channels=3)
+    image = tf.image.resize(image,[192,192], preserve_aspect_ratio=False) #resize images
     image /= 255.0 # normalization 
     return image
 
@@ -31,3 +33,11 @@ def load_and_preprocess_image(path):
     image = tf.io.read_file(path)
     return preprocess_img(image)
 
+def prepare_dataset(images_paths, images_labels, num_parallel_calls):
+
+    path_ds = tf.data.Dataset.from_tensor_slices(images_paths)
+    image_ds = path_ds.map(load_and_preprocess_image, num_parallel_calls=num_parallel_calls)
+    label_ds = tf.data.Dataset.from_tensor_slices(tf.cast(images_labels, tf.int64))
+    image_label_ds = tf.data.Dataset.zip((image_ds, label_ds))
+
+    return image_label_ds
