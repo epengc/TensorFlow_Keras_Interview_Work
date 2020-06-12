@@ -43,12 +43,8 @@ def demo_basic():
     val_images_labels = all_images_labels[index::]
     print('val_data number is {}'.format(len(val_images_labels)))
 
-    train_ds = prepare_dataset(all_images_paths[0:index], all_images_labels[0:index], AUTOTUNE)
-    val_ds = prepare_dataset(all_images_paths[index::], all_images_labels[index::], AUTOTUNE)
-    ds = train_ds.shuffle(buffer_size=image_count)
-    ds = ds.repeat()
-    ds = ds.batch(args.train_batch_size)
-    ds = ds.prefetch(buffer_size=AUTOTUNE)
+    train_ds = prepare_dataset(all_images_paths[0:index], all_images_labels[0:index], AUTOTUNE, 'train')
+    val_ds = prepare_dataset(all_images_paths[index::], all_images_labels[index::], AUTOTUNE, 'val')
     
     model = mobile_net(classes=len(label_names))
     callbacks = [
@@ -62,8 +58,8 @@ def demo_basic():
     steps_per_epoch = tf.math.ceil(index/args.train_batch_size).numpy()
     print('steps_per_epoch = {}'.format(steps_per_epoch))
     
-    model.fit(ds, epochs=args.max_epochs, steps_per_epoch=steps_per_epoch, callbacks=callbacks, verbose=2)
-    model.evaluate(val_ds.batch(2), batch_size=2, verbose=2)
+    model.fit(train_ds, epochs=args.max_epochs, steps_per_epoch=steps_per_epoch, callbacks=callbacks, verbose=2)
+    model.evaluate(val_ds, batch_size=args.val_batch_size, verbose=1)
     converter = tf.lite.TFLiteConverter.from_keras_model(model)
     tflite_model = converter.convert()
 
