@@ -30,7 +30,8 @@ Validation: 13 x (batch_size=2, 192, 192, 3)
 Validation -loss: 0.1164 -accuracy: 1.0000  
 <div>
 <img src="samples/Kazam_screenshot_00004.png" width=100%>
-</div>
+</div>  
+
 ## Testing restults
 10 Test data, --accuracy: 1.00  
 <div>
@@ -39,17 +40,21 @@ Validation -loss: 0.1164 -accuracy: 1.0000
 <img src="test/test/test_02.png" width="150", alt= "test_02.png", title="test_02.png">
 <img src="test/test/test_03.png" width="150", alt= "test_03.png", title="test_03.png">
 <img src="test/test/test_04.png" width="150", alt= "test_04.png", title="test_04.png">
-</div>
-
+</div>  
+Test data from test_00.png to test_04.png
+  
+  
 <div>
-<img src="test/test/test_05.png" width=20%>
-<img src="test/test/test_06.png" width=20%>
-<img src="test/test/test_07.png" width=20%>
-<img src="test/test/test_08.png" width=20%>
-<img src="test/test/test_09.png" width=20%>
-</div>
-
-
+<img src="test/test/test_05.png" width="150">
+<img src="test/test/test_06.png" width="150">
+<img src="test/test/test_07.png" width="150">
+<img src="test/test/test_08.png" width="150">
+<img src="test/test/test_09.png" width="150">
+</div>  
+Test data from test_05.png to test_09.png
+  
+  
 <div>
-<img src="samples/Screenshotfrom2020-06-13 14-26-58.png" width=100%>
+<img src="samples/Screenshot from 2020-06-13 14-26-58.png" width=100%>
 </div>
+
