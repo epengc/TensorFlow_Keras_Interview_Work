@@ -1,10 +1,8 @@
 # Visual Defence Homework -- Cocacola, Pepsi can classifier
 Cocacola, pepsi can classifier based on MobileNetV2 for Keras and Tensorflow 2.2
-## Datasets
-# Visual Defence Homework -- Cocacola, Pepsi can classifier
-Cocacola, pepsi can classifier based on MobileNetV2 for Keras and Tensorflow 2.2
 ## Datasets for trainig and validation
 ./data/cocacola 74 png
+
 ./data/pepsi 63 png
 9/10 png are selected for training
 1/10 png are selected for validation
