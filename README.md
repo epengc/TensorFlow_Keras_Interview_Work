@@ -29,5 +29,27 @@ Validation: 13 x (batch_size=2, 192, 192, 3)
 
 Validation -loss: 0.1164 -accuracy: 1.0000  
 <div>
-<img src="samples/Kazam_screenshot_00004.png" width=90%>
+<img src="samples/Kazam_screenshot_00004.png" width=100%>
+</div>
+## Testing restults
+10 Test data, --accuracy: 1.00  
+<div>
+<img src="test/test/test_00.png" width=100%>
+<img src="test/test/test_01.png" width=100%>
+<img src="test/test/test_02.png" width=100%>
+<img src="test/test/test_03.png" width=100%>
+<img src="test/test/test_04.png" width=100%>
+</div>
+
+<div>
+<img src="test/test/test_05.png" width=100%>
+<img src="test/test/test_06.png" width=100%>
+<img src="test/test/test_07.png" width=100%>
+<img src="test/test/test_08.png" width=100%>
+<img src="test/test/test_09.png" width=100%>
+</div>
+
+
+<div>
+<img src="samples/Kazam_screenshot_00005.png" width=100%>
 </div>
