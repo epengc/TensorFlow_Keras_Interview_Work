@@ -34,7 +34,7 @@ Validation -loss: 0.1164 -accuracy: 1.0000
 ## Testing restults
 10 Test data, --accuracy: 1.00  
 <div>
-<img src="test/test/test_00.png" width=20%>
+<img src="test/test/test_00.png" width="150", title="test_00.png">
 <img src="test/test/test_01.png" width=20%>
 <img src="test/test/test_02.png" width=20%>
 <img src="test/test/test_03.png" width=20%>
@@ -51,5 +51,5 @@ Validation -loss: 0.1164 -accuracy: 1.0000
 
 
 <div>
-<img src="samples/Kazam_screenshot_00005.png" width=100%>
+<img src="samples/Screenshotfrom2020-06-13 14-26-58.png" width=100%>
 </div>
