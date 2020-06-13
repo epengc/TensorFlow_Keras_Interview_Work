@@ -91,7 +91,9 @@ def demo_test(label_names):
     predicts = tf.keras.backend.argmax(predicts, 1).numpy()
     print(predicts)
     results = dict((name, label_to_index[predicts[index]]) for index, name in enumerate(test_images_paths))
-    print('predictions = {}'.format(results))
+
+    for result in results:
+        print('predictions: {} is {}'.format(result, results[result]))
 
 
 
