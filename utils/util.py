@@ -9,7 +9,9 @@ import argparse
 def parse_parameters():
     parser = argparse.ArgumentParser(description='Visual Defense Homework Net')
     parser.add_argument('--data_root', default='./data', type=str, metavar='DIR',
-                        help='path to dataset')
+                        help='path to dataset for training and validation')
+    parser.add_argument('--data_test', default='./test', type=str, metavar='DIR',
+                        help='path to dataset for test')
     parser.add_argument('--train_batch_size', default=4, type=int, metavar='N', 
                         help='Batch_size when training')
     parser.add_argument('--val_batch_size', default=2, type=int, metavar='N', 
@@ -60,5 +62,5 @@ def prepare_test_dataset(images_paths, num_parallel_calls):
     args = parse_parameters()
     path_ds = tf.data.Dataset.from_tensor_slices(images_paths)
     image_ds = path_ds.map(load_and_preprocess_image, num_parallel_calls=num_parallel_calls)
-    val_ds = image_ds.batch(args.val_batch_size)
+    val_ds = image_ds.batch(1)
     return val_ds

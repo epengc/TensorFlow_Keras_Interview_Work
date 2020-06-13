@@ -10,9 +10,11 @@ import matplotlib.pyplot as plt
 from utils.util import *
 from model.mobile_net import *
 
+AUTOTUNE = tf.data.experimental.AUTOTUNE
+
+
 def demo_train_val():
 
-    AUTOTUNE = tf.data.experimental.AUTOTUNE
     args = parse_parameters()
     data_root_orig = os.path.abspath(args.data_root)
     data_root = pathlib.Path(data_root_orig)
@@ -45,7 +47,6 @@ def demo_train_val():
 
     train_ds = prepare_train_dataset(all_images_paths[0:index], all_images_labels[0:index], AUTOTUNE)
     val_ds = prepare_val_dataset(all_images_paths[index::], all_images_labels[index::], AUTOTUNE)
-    test_ds = prepare_test_dataset(all_images_paths[index::], AUTOTUNE)
 
     model = mobile_net(classes=len(label_names))
     callbacks = [
@@ -61,18 +62,40 @@ def demo_train_val():
     
     model.fit(train_ds, epochs=args.max_epochs, steps_per_epoch=steps_per_epoch, callbacks=callbacks, verbose=2)
     model.evaluate(val_ds, batch_size=args.val_batch_size, verbose=1)
+    model.save(args.weights+'/final_model.h5')
     converter = tf.lite.TFLiteConverter.from_keras_model(model)
     tflite_model = converter.convert()
 
     with tf.io.gfile.GFile(os.path.join(args.weights,'model.tflite'),'wb') as f:
         f.write(tflite_model)
 
+    return label_names
+
+
+def demo_test(label_names):
+    # Preparing for test dataset
+    args = parse_parameters()
+    data_test = os.path.abspath(args.data_test)
+    data_test = pathlib.Path(data_test)
+    test_images_paths = list(data_test.glob('*/*'))
+    print(test_images_paths)
+    test_images_paths = [str(path) for path in test_images_paths]
+    test_count = len(test_images_paths)
+    print('The test data amount is ----------------- {}'.format(test_count))
+    test_ds = prepare_test_dataset(test_images_paths, AUTOTUNE)
+
+    label_to_index = dict((index, name) for index, name in enumerate(label_names))
+    # crreate a new blank model
+    model=tf.keras.models.load_model(args.weights+'/final_model.h5')
     predicts = model.predict(test_ds)
-    print('predictions = {}'.format(tf.keras.backend.argmax(predicts, 1)))
-    
-#def demo_predict():
+    predicts = tf.keras.backend.argmax(predicts, 1).numpy()
+    print(predicts)
+    results = dict((name, label_to_index[predicts[index]]) for index, name in enumerate(test_images_paths))
+    print('predictions = {}'.format(results))
+
+
 
 if __name__ == '__main__':
-    demo_train_val()
-
+    label_names = demo_train_val()
+    demo_test(label_names=['cocacola', 'pepsi'])
 
