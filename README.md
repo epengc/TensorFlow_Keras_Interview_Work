@@ -34,19 +34,19 @@ Validation -loss: 0.1164 -accuracy: 1.0000
 ## Testing restults
 10 Test data, --accuracy: 1.00  
 <div>
-<img src="test/test/test_00.png" width=100%>
-<img src="test/test/test_01.png" width=100%>
-<img src="test/test/test_02.png" width=100%>
-<img src="test/test/test_03.png" width=100%>
-<img src="test/test/test_04.png" width=100%>
+<img src="test/test/test_00.png" width=20%>
+<img src="test/test/test_01.png" width=20%>
+<img src="test/test/test_02.png" width=20%>
+<img src="test/test/test_03.png" width=20%>
+<img src="test/test/test_04.png" width=20%>
 </div>
 
 <div>
-<img src="test/test/test_05.png" width=100%>
-<img src="test/test/test_06.png" width=100%>
-<img src="test/test/test_07.png" width=100%>
-<img src="test/test/test_08.png" width=100%>
-<img src="test/test/test_09.png" width=100%>
+<img src="test/test/test_05.png" width=20%>
+<img src="test/test/test_06.png" width=20%>
+<img src="test/test/test_07.png" width=20%>
+<img src="test/test/test_08.png" width=20%>
+<img src="test/test/test_09.png" width=20%>
 </div>
 
 
