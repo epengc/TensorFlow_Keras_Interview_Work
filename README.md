@@ -10,9 +10,5 @@ Cocacola, pepsi can classifier based on MobileNetV2 for Keras and Tensorflow 2.2
 10 png are selected for test  
 ## Architectures
 '''python
-tf.keras.Sequential([
-        MobileNetV2(input_shape=(192,192,3), include_top=False),
-        tf.keras.layers.GlobalAveragePooling2D(), 
-        tf.keras.layers.Dense(classes, activation='softmax')
-    ])
+tf.keras.Sequential([MobileNetV2(input_shape=(192,192,3), include_top=False), tf.keras.layers.GlobalAveragePooling2D(), tf.keras.layers.Dense(classes, activation='softmax')])
 '''
