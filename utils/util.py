@@ -35,19 +35,30 @@ def load_and_preprocess_image(path):
     image = tf.io.read_file(path)
     return preprocess_img(image)
 
-def prepare_dataset(images_paths, images_labels, num_parallel_calls, label):
-    
+def prepare_train_dataset(images_paths, images_labels, num_parallel_calls):
     args = parse_parameters()
     path_ds = tf.data.Dataset.from_tensor_slices(images_paths)
     image_ds = path_ds.map(load_and_preprocess_image, num_parallel_calls=num_parallel_calls)
     label_ds = tf.data.Dataset.from_tensor_slices(tf.cast(images_labels, tf.int64))
     image_label_ds = tf.data.Dataset.zip((image_ds, label_ds))
-    if label=='train':
-        image_label_ds = image_label_ds.shuffle(buffer_size=len(images_paths))
-        image_label_ds = image_label_ds.repeat()
-        image_label_ds = image_label_ds.batch(args.train_batch_size)
-        image_label_ds = image_label_ds.prefetch(buffer_size=num_parallel_calls)
-    if label=='val':
-        image_label_ds = image_label_ds.batch(args.val_batch_size)
-        
-    return image_label_ds
+    train_ds = image_label_ds.shuffle(buffer_size=len(images_paths))
+    train_ds = train_ds.repeat()
+    train_ds = train_ds.batch(args.train_batch_size)
+    train_ds = train_ds.prefetch(buffer_size=num_parallel_calls)
+    return train_ds
+
+def prepare_val_dataset(images_paths, images_labels, num_parallel_calls):
+    args = parse_parameters()
+    path_ds = tf.data.Dataset.from_tensor_slices(images_paths)
+    image_ds = path_ds.map(load_and_preprocess_image, num_parallel_calls=num_parallel_calls)
+    label_ds = tf.data.Dataset.from_tensor_slices(tf.cast(images_labels, tf.int64))
+    image_label_ds = tf.data.Dataset.zip((image_ds, label_ds))
+    val_ds = image_label_ds.batch(args.val_batch_size)
+    return val_ds
+
+def prepare_test_dataset(images_paths, num_parallel_calls):
+    args = parse_parameters()
+    path_ds = tf.data.Dataset.from_tensor_slices(images_paths)
+    image_ds = path_ds.map(load_and_preprocess_image, num_parallel_calls=num_parallel_calls)
+    val_ds = image_ds.batch(args.val_batch_size)
+    return val_ds

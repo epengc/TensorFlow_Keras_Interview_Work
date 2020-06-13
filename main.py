@@ -10,42 +10,43 @@ import matplotlib.pyplot as plt
 from utils.util import *
 from model.mobile_net import *
 
-def demo_basic():
+def demo_train_val():
 
     AUTOTUNE = tf.data.experimental.AUTOTUNE
     args = parse_parameters()
     data_root_orig = os.path.abspath(args.data_root)
     data_root = pathlib.Path(data_root_orig)
-    print('Dataset path = {}'.format(data_root))
+    #print('Dataset path = {}'.format(data_root))
 
-    for item in data_root.iterdir():
-        print(item)
+    #for item in data_root.iterdir():
+    #    print(item)
     all_images_paths = list(data_root.glob('*/*'))
-    print('some_images_paths = {}'.format(all_images_paths[-5:]))
+    #print('some_images_paths = {}'.format(all_images_paths[-5:]))
     all_images_paths = [str(path) for path in all_images_paths]
     random.shuffle(all_images_paths)
     image_count = len(all_images_paths)
-    print('image_count = {}'.format(image_count))
+    #print('image_count = {}'.format(image_count))
 
     label_names = sorted(item.name for item in data_root.glob('*/') if item.is_dir())
-    print('label_name = {}'.format(label_names))
+    #print('label_name = {}'.format(label_names))
     label_to_index = dict((name, index) for index, name in enumerate(label_names))
-    print('label_to_index = {}'.format(label_to_index))
+    #print('label_to_index = {}'.format(label_to_index))
     
-    for path in all_images_paths:
-        print(pathlib.Path(path).parent.name)
+    #for path in all_images_paths:
+    #    print(pathlib.Path(path).parent.name)
     all_images_labels = [label_to_index[pathlib.Path(path).parent.name] for path in all_images_paths]
-    print(all_images_labels[:10])
+    #print(all_images_labels[:10])
 
     index = int(args.ratio*image_count)
     train_images_labels = all_images_labels[0:index]
-    print('train_data number is {}'.format(len(train_images_labels)))
+    #print('train_data number is {}'.format(len(train_images_labels)))
     val_images_labels = all_images_labels[index::]
-    print('val_data number is {}'.format(len(val_images_labels)))
+    #print('val_data number is {}'.format(len(val_images_labels)))
 
-    train_ds = prepare_dataset(all_images_paths[0:index], all_images_labels[0:index], AUTOTUNE, 'train')
-    val_ds = prepare_dataset(all_images_paths[index::], all_images_labels[index::], AUTOTUNE, 'val')
-    
+    train_ds = prepare_train_dataset(all_images_paths[0:index], all_images_labels[0:index], AUTOTUNE)
+    val_ds = prepare_val_dataset(all_images_paths[index::], all_images_labels[index::], AUTOTUNE)
+    test_ds = prepare_test_dataset(all_images_paths[index::], AUTOTUNE)
+
     model = mobile_net(classes=len(label_names))
     callbacks = [
         tf.keras.callbacks.ModelCheckpoint(filepath=args.weights)
@@ -65,8 +66,13 @@ def demo_basic():
 
     with tf.io.gfile.GFile(os.path.join(args.weights,'model.tflite'),'wb') as f:
         f.write(tflite_model)
+
+    predicts = model.predict(test_ds)
+    print('predictions = {}'.format(tf.keras.backend.argmax(predicts, 1)))
     
+#def demo_predict():
+
 if __name__ == '__main__':
-    demo_basic()
+    demo_train_val()
 
 
