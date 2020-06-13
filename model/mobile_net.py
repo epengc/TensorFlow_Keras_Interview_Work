@@ -7,7 +7,7 @@ def mobile_net(classes=2):
     mobile_net.trainable=False
     model = tf.keras.Sequential([
         mobile_net,
-        tf.keras.layers.GlobalAveragePooling2D(), #平均池化
-        tf.keras.layers.Dense(classes, activation='softmax') #分类
+        tf.keras.layers.GlobalAveragePooling2D(), 
+        tf.keras.layers.Dense(classes, activation='softmax')
     ])
     return model
