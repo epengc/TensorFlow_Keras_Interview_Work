@@ -27,4 +27,7 @@ Validation: 13 x (batch_size=2, 192, 192, 3)
 |   03    |     4      |0.0795     |0.9919    |
 |   04    |     4      |0.0556     |1.0000    |
 
-Validation -loss: 0.1164 -accuracy: 1.0000
+Validation -loss: 0.1164 -accuracy: 1.0000  
+<div>
+<img src="samples/Kazam_screenshot_00004.png" width=30%>
+</div>
